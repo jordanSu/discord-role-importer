@@ -25,7 +25,8 @@ def combine_name_and_discriminator(name: str, discriminator: str):
 async def on_ready():
     guild = client.get_guild(int(GUILD_ID))
     if (guild == None):
-        print(f'Cannot get guild with id {GUILD_ID}, please ctrl-C and check it again')
+        print(f'Cannot get guild with id {GUILD_ID}, please check the GUILD_ID that you provided in .env is correct')
+        await client.close()
         return
     
     # fetch members dict in this guild
@@ -39,7 +40,8 @@ async def on_ready():
         role_dict[role.name] = role
     
     if (ROLE_LIST_FILE == ''):
-        print('role list file not specified, please ctrl-C and check it again')
+        print('role list file not specified, please check the ROLE_LIST_FILE that you provided is correct')
+        await client.close()
         return
     with open(ROLE_LIST_FILE, newline='') as csvfile:
         rows = csv.reader(csvfile)
@@ -60,7 +62,8 @@ async def on_ready():
                     except HTTPException:
                         logging.warning('HTTPException when add role {role} to user {user_name}')
             
-    print('Roles importing process complete, you can now safely ctrl-C this process')
+    print(f'Roles importing process complete, you can check {LOG_PATH} for more details')
+    await client.close()
 
 if __name__ == '__main__':
     logging.basicConfig(
